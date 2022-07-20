@@ -6,18 +6,24 @@ Clone the OneNet-Fiware-True-Connector environment on your server.
 The change for customization must be made in the three files, some configuration files must be modified:
 
 **onenet-connector-fiware-data-app/src/test/resources/application.properties**
+
 **onenet-connector-fiware-data-app/src/main/resources/application.properties**
+
 **onenet-true-connector/docker/.env**
 
 
 In this case it is necessary to change the IP address (e.g., 217.172.12.150) by entering the IP of the server hosting this new installation.
 
 
-onenet-connector-fiware-data-app/src/test/resources/application.properties-application.orion.host=<your-ip-address>
-onenet-connector-fiware-data-app/src/test/resources/application.properties-application.mongo.host=<your-ip-address>
-onenet-connector-fiware-data-app/src/main/resources/application.properties-application.orion.host=<your-ip-address>
-onenet-connector-fiware-data-app/src/main/resources/application.properties-application.mongo.host=<your-ip-address>
-onenet-true-connector/docker/.env-LOCAL_IP_PROVIDER_CONTEXT_BROKER=<your-ip-address>
+onenet-connector-fiware-data-app/src/test/resources/application.properties-application.orion.host=**your-ip-address**
+
+onenet-connector-fiware-data-app/src/test/resources/application.properties-application.mongo.host=**your-ip-address**
+
+onenet-connector-fiware-data-app/src/main/resources/application.properties-application.orion.host=**your-ip-address**
+
+onenet-connector-fiware-data-app/src/main/resources/application.properties-application.mongo.host=**your-ip-address**
+
+onenet-true-connector/docker/.env-LOCAL_IP_PROVIDER_CONTEXT_BROKER=**your-ip-address**
 
 
 ## Second Step - Build & Start
