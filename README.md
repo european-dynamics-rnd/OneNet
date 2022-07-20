@@ -61,7 +61,7 @@ docker-compose up -d
 
 ### Create Entity
 ```
-curl --location --request POST 'http://161.27.42.188:8084/createentity' `
+curl --location --request POST 'http://<DATAAPP_IP_ADDRESS>:8084/createentity' `
 --header 'Content-Type: application/ld+json' `
 --data-raw '{
     "id": "urn:ngsi-ld:Building:store001",
@@ -104,19 +104,19 @@ curl --location --request POST 'http://161.27.42.188:8084/createentity' `
 ### Registration
 
 ```
-curl --location --request POST 'http://192.168.1.85:8084/registration' `
+curl --location --request POST 'http://<DATAAPP_IP_ADDRESS>:8084/registration' `
 --header 'Content-Type: application/ld+json' `
 --data-raw '{
     "entityId": "urn:ngsi-ld:Building:store001",
-    "eccUrl": "http://161.27.42.188:8889/data",
-    "brokerUrl": "http://161.27.42.188:1026"
+    "eccUrl": "http://<PROVIDER_IP_ADDRESS>:8889/data",
+    "brokerUrl": "http://<PROVIDER_IP_ADDRESS>:1026"
 }'
 ```
 
 ### Get Entity
 
 ```
-curl --location --request GET 'http://192.168.1.85:8084/getentity/urn:ngsi-ld:Building:store001' `
+curl --location --request GET 'http://<DATAAPP_IP_ADDRESS>:8084/getentity/urn:ngsi-ld:Building:store001' `
 --header 'host;' `
 --header 'accept: application/json'
 ```
