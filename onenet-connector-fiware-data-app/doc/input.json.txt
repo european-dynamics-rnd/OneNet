@@ -1,0 +1,12 @@
+{
+  "@context" : {
+    "jobtitle" : "http://schema.org/jobTitle",
+    "name" : "http://schema.org/name",
+    "url" : "http://schema.org/url"
+  },
+  "@type" : "http://schema.org/Person",
+  "name" : "Ashish Lahoti",
+  "jobtitle" : "Software Developer",
+  "url" : "https://codingnconcepts.com",
+  "@id" : "mailto:lahoti.ashish20@gmail.com"
+}

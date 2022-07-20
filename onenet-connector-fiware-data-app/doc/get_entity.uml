@@ -1,0 +1,53 @@
+@startuml
+
+title Entity - Room1
+
+actor User
+
+box "Consumer Context Broker" #LightBlue
+participant ConsumerContextBroker as CCB
+participant ConsumerDataApp as CDA
+participant ConsumerECC as CECC
+end box
+
+box "Provider Context Broker" 
+participant ProviderECC as PECC
+participant ProviderDataApp as PDA
+participant ProviderContextBroker as PCB
+end box
+
+group Request
+	User -> CDA : get Entity Room1 (Header: Forward-To: provider-ecc)
+	note left
+		1. Header value 
+		**Forward-To: ecc-providr.com**
+		is mandatory so that Consumer Connector 
+		knows location of B-endoint for Provider Connector.
+		Request will contain URL of Provider Context Broker, so 
+		that Provider Data App knows where to forward request
+		2. Header value: 
+		**Provider-Context-Broker: provider.context.broker.com/** 
+		is mandatory so that Provider DataApp knows which provider CB
+		should sned request to.
+	end note
+	
+	CDA -> CECC : forward request using value of Consumer ECC from property file
+	CECC -> PECC : forward request using Forward-To value
+	PECC -> PDA : forward
+	PDA -> PCB : recreate URL and send request from payload
+	note right
+		How provider Connector will know
+		URL on which Context Broker is deployed???
+		1. in property file
+		2. present in request
+	end note
+end group
+
+group Response
+	PCB -> PDA : send Entity Room1
+	PDA -> PECC : forward Room1
+	PECC -> CECC : forward Room1
+	CECC -> CDA : forward Room1
+	CDA -> User : forward Room1
+end note
+@enduml

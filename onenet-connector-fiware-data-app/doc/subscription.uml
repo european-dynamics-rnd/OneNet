@@ -1,0 +1,100 @@
+@startuml
+
+title Subscription flow
+
+actor User
+
+box "Consumer Context Broker" #LightBlue
+participant ConsumerContextBroker as CCB
+participant ConsumerDataApp as CDA
+participant ConsumerECC as CECC
+end box
+
+box "Provider Context Broker"
+participant ProviderECC as PECC
+participant ProviderDataApp as PDA
+participant ProviderContextBroker as PCB
+Participant Room1
+end box
+
+group CreateSubscription
+	User -> CDA : POST  /v2/subscriptions
+	note left
+		1. Header value:
+		**Forward-To: ecc-providr.com**
+		is mandatory so that Consumer Connector 
+		knows location of B-endoint for Provider Connector.
+		Request will contain URL of Provider Context Broker, so 
+		that Provider Data App knows where to forward request
+		2. Header value: 
+		**Provider-Context-Broker: provider.context.broker.com/** 
+		is mandatory so that Provider DataApp knows which provider CB
+		should sned request to.
+		3. Header value:
+		**Sender-ECC: ecc-consumer.com**
+		Need this value in order to know Forward-To URL when
+		notification event is received
+	end note
+	CDA -> CDA : create subscription request\npack **Provider-Context-Broker** to payload
+	CDA -> CECC : send request to Provider ECC\nusing Forward-To URL
+	CECC -> PECC : forward 
+	PECC -> PDA : forward
+	note right 
+		"Create Binding"
+		1. Replace URL in subscription request with Provider Data App URL
+		2. Store original URL of subscription request - it will be needed to send back,
+		so that Consumer Data App knows to which Context Broker to send data
+		3. Make binding of EntityId in subscription request, original URL
+		4. Missing information of Consumer ECC (Forward-To when notification is received)
+		Need to use custom header **Sender-ECC**
+	end note
+	PDA -> PCB : /v2/subscriptions fire request with dataApp URL 
+	PCB -> PCB : create new subscription
+	PCB -> PDA : send subscription created response
+	PDA -> PDA : process response from PCB - subscriptionId
+	note right: save "subscriptionId": "57458eb60962ef754e7c0998" and create mapping with originating URL
+	PDA -> PECC : forward
+	PECC -> CECC : forward
+	CECC -> CDA : forward
+end
+
+group Receive Subscription
+	Room1 -> Room1 : temperature is changed
+	PCB -> PCB : event for attribute change
+	PCB -> PDA : send request for new entity update\n"subscriptionId": "57458eb60962ef754e7c0998"
+	note right: Provider CB has URL of the Consumer DataApp\nnot the Consumer CB
+	PDA -> PDA : get original URL and Forward-To from storage,\nusing subscriptionId from notification\nand forward request to that URL
+	PDA -> PECC : send request
+	PECC -> CECC : forward
+	CECC -> CDA : forward
+	CDA -> CCB : send response back to\nConsumer ContextBroker\nusing original URL from response
+end
+
+== Not applicable scenario ==
+
+group Create Subscription 2 - Not applicable since it is not going via IDS Ecosystem 
+	User -> PCB : send subscription request 
+	note right
+		 "notification": {
+	    "http": {
+	      "url": "http://localhost:1028/accumulate"
+	    },
+	    "attrs": [
+	      "temperature"
+	    ]
+	  }
+  end note
+	PCB -> PCB : create subscription
+	PCB -> User : send response of created subscription
+	note left
+		< HTTP/1.1 201 Created
+		< Connection: Keep-Alive
+		< Content-Length: 0
+		< Location: /v2/subscriptions/57458eb60962ef754e7c0998
+		< Fiware-Correlator: 9ac7bbba-2268-11e6-aaf0-d48564c29d20
+		< Date: Wed, 25 May 2016 11:05:35 GMT
+	end note
+end group
+
+
+@enduml

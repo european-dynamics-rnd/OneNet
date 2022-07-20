@@ -1,0 +1,39 @@
+version: "3.5"
+name: "onenet-orion-context-broker-provider"
+services:
+  orion-provider:
+    image: fiware/orion-ld:0.7.0
+    hostname: orion
+    container_name: fiware-orion-provider
+    expose:
+      - "1027"
+      - "8083"
+    ports:
+      - "1027:1026"
+    depends_on:
+      - mongo-db-provider
+    #command: -dbhost mongo-db -logLevel DEBUG
+    #command: -statCounters -dbhost mongo-db -logLevel DEBUG -forwarding
+    command: -dbhost 'mongo-db-provider' -db orion -dbuser onenet -dbpwd true2022 -statCounters -logLevel DEBUG -forwarding
+
+  mongo-db-provider:
+    image: mongo:3.6
+    hostname: mongo-db-provider
+    container_name: db-mongo-provider
+    environment:
+       - MONGO_INITDB_DATABASE=orion
+       - MONGO_INITDB_ROOT_USERNAME=onenet
+       - MONGO_INITDB_ROOT_PASSWORD=true2022    
+    ports:
+      - "27018:27017" 
+    networks:
+      - default
+    command: --auth --nojournal
+#    volumes:
+#      - mongo-db-provider:/data
+    volumes:
+#      - mongo-db-provider:/data
+      - ./data-provider:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+volumes:
+  mongo-db-provider: ~
