@@ -28,28 +28,34 @@ onenet-true-connector/docker/.env-LOCAL_IP_PROVIDER_CONTEXT_BROKER=**your-ip-add
 
 ## Second Step - Build & Start
 Let's start the OneNet services, first step compile the java code and create the build.
-
+```
 cd onenet-connector-fiware-data-app/
+```
 
 ### JAVA Build 
 
 mvn clean install -U -e
 
 ### Docker build
-
+```
 docker build -t onenet-connector-fiware-data-app:0.1 .
+
+```
+### Start orion-context-broker service
+
+```
+cd onenet-connector-fiware-data-app/doc
+
+docker-compose -f docker-compose-cb.yml up -d
+```
+
+### Start OneNet-Fiware-true-connector
+```
 
 cd onenet-true-connector/docker
 
-### Start orion-context-broker service
-
-docker-compose -f docker-compose-cb.yml up -d
-
-cd onenet-connector-fiware-data-app/doc
-
-### Start OneNet-Fiware-true-connector
-
 docker-compose up -d
+```
 
 ## API Examples
 
