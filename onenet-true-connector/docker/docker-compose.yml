@@ -53,7 +53,7 @@ services:
 
   be-dataapp-provider:
     # image: rdlabengpa/ids_fiware_data_app:v0.0.2
-    image: onenet-connector-fiware-data-app:0.1
+    image: 109.232.32.194:5000/onenet-connector-fiware-data-app:0.1
     environment:
        - "SPRING_PROFILES_ACTIVE=docker"  
        - DATA_APP_MULTIPART=${PROVIDER_MULTIPART_EDGE}
@@ -126,7 +126,7 @@ services:
 
   be-dataapp-consumer:
     # image: rdlabengpa/ids_fiware_data_app:v0.0.2
-    image: onenet-connector-fiware-data-app:0.1
+    image: 109.232.32.194:5000/onenet-connector-fiware-data-app:0.1
     environment:
        - "SPRING_PROFILES_ACTIVE=docker"  
        - DATA_APP_MULTIPART=${CONSUMER_MULTIPART_EDGE}
@@ -146,3 +146,39 @@ services:
       - ./be-dataapp_resources:/config
       - ./be-dataapp_data_sender:/data
       - ./ecc_cert:/cert
+  orion:
+    image: fiware/orion-ld:0.7.0
+    hostname: orion
+    container_name: fiware-orion
+    expose:
+      - "1026"
+      - "8083"
+    ports:
+      - "1026:1026"
+    depends_on:
+      - mongo-db
+    #command: -dbhost mongo-db -logLevel DEBUG
+    #command: -statCounters -dbhost mongo-db -logLevel DEBUG -forwarding
+    command: -dbhost 'mongo-db' -db orion -dbuser onenet -dbpwd true2022 -statCounters -logLevel DEBUG -forwarding
+
+  mongo-db:
+    image: mongo:3.6
+    hostname: mongo-db
+    container_name: db-mongo
+    environment:
+       - MONGO_INITDB_DATABASE=orion
+       - MONGO_INITDB_ROOT_USERNAME=onenet
+       - MONGO_INITDB_ROOT_PASSWORD=true2022               
+    ports:
+      - "27017:27017" 
+    networks:
+      - default
+    command: --auth --nojournal
+#    volumes:
+#      - mongo-db:/data
+    volumes:
+#      - mongo-db:/data
+      - ./data-consumer:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+volumes:
+  mongo-db: ~
