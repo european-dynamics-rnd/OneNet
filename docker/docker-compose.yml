@@ -1,5 +1,4 @@
 version: '2.2'
-name: "onenet-fiware-true-connector"
 services:
   ecc-provider: 
     image: rdlabengpa/ids_execution_core_container:v1.9.3
