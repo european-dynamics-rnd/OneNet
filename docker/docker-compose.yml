@@ -53,7 +53,7 @@ services:
 
   be-dataapp-provider:
     # image: rdlabengpa/ids_fiware_data_app:v0.0.2
-    image: 109.232.32.194:5000/onenet-connector-fiware-data-app:0.1
+    image: ferbosco/onenet-connector-fiware-data-app:0.1
     environment:
        - "SPRING_PROFILES_ACTIVE=docker"  
        - DATA_APP_MULTIPART=${PROVIDER_MULTIPART_EDGE}
@@ -126,7 +126,7 @@ services:
 
   be-dataapp-consumer:
     # image: rdlabengpa/ids_fiware_data_app:v0.0.2
-    image: 109.232.32.194:5000/onenet-connector-fiware-data-app:0.1
+    image: ferbosco/onenet-connector-fiware-data-app:0.1
     environment:
        - "SPRING_PROFILES_ACTIVE=docker"  
        - DATA_APP_MULTIPART=${CONSUMER_MULTIPART_EDGE}
