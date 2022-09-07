@@ -118,9 +118,17 @@ This command downloads a test image and runs it in a container. When the contain
 
 ## **Onenet Containers Installation on Docker**
 
-ONENET is available online in six specified co-existing docker images to efficiently distribute the software avoiding the likelihood of collisions. Therefore, there is one image specified to host the backend application (*dras-backend*) as well as one for the frontend application (*dras-frontend*). Two other docker images are created to host the ONENET database (*dras-db*) and the PhpMyAdmin application (*phpmyadmin*) to be able to access the database from a UI for administrative purposes, also an image with Redis server (*redis*) is created and used by ONENET for caching and the sixth docker image provides access and navigation to the log files of ONENET and is used for debugging purposes.
+To proceed with the installation of ONENET, the user must use the *docker* folder that contains all the necessary configuration.
 
-To proceed with the installation of ONENET, the user must use the *docker* folder that contains all the necessary configuration of the backend, frontend and the database.
+4b. Docker Settings
+
+The OneNet Data APP Docker image is available in a private docker registry (hosted by ENG). Please add the registry in your [docker settings](https://docs.docker.com/registry/insecure/).
+
+```
+{
+  "insecure-registries" : ["109.232.32.194:5000"]
+}
+```
 
 6. Next step is to deploy Onenet using Docker Compose. First step is to clone the <https://github.com/european-dynamics-rnd/OneNet>  repository, by typing:
 ```
@@ -311,18 +319,6 @@ services:
 #      - mongo-db:/data
       - ./data-consumer:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-  local_api:
-    build:
-      context: local-api
-      args:
-        SOFIA_URI: https://onenet-ngsi-ld.eurodyn.com/api
-      dockerfile: Dockerfile
-    image: local-api
-    container_name: local-api
-    ports:
-      - "30001:30001"
-      - "30000:30000"
-    restart: unless-stopped
 volumes:
   mongo-db: ~
 ```
@@ -334,31 +330,32 @@ $docker-compose logs -f
 ```
 9. If no errors are seen, this means that ONENET FIWARE TRUE CONNECTOR was successfully deployed.
 
-## **Central Registry Ui Configuration**
+## **Onenet Local Application installation**
 
-### **Certificate Installation**
+### **Installation instructions**
 
-1. The Local API component runs locally on each Users Premisses as a web service on the port 30000 (which is similar to deploying a local server) and the communication is done through the browser. Central Registry API uses encrypted communication (https) but because Local API is deployed locally on users premisses its certificate also needs to be installed on the same PC before it can be used.
+On every client computer that will run Onenet you must also install the Onenet Local Application by following the below steps:
 
-- Download the certificate from https://onenet-ngsi-ld.eurodyn.com/installation-files/feg-local.crt.
+1. Login to the Ui Application From https://onenet-ngsi-ld.eurodyn.com using the username & password that you received from the onenet administrator.
 
-- Double click the downloaded file and choose Install Certificate on the window that pops up
+![](image3.png)
 
-![](image6.png)
+2. Download the Onenet Local Application installer from the "Useful documents" menu 
 
-- Follow the configuration shown below in order to install the certificate on the window that pops up
+![](usefuldocuments.jpg)
 
-![](image7.png)
-![](image8.png)
-![](image9.png)
-![](image10.png)
-![](image11.png)
+3. Double click & run the Application
 
-- Restart Your Browser
-<br>
+![](onenetexe.jpg)
+
+3. After running the web browser should popup and show the page below indicating that the application is running.
+
+![](onenet2.jpg)
+
 ### **Local Applications subscription To the Central Registry**
 <br>
-2. Login to the Ui Central Registry From <https://onenet-ngsi-ld.eurodyn.com> using the username & password that you received from the onenet administrator.
+2. Login to the Ui Central Registry From https://onenet-ngsi-ld.eurodyn.com using the username & password that you received from the onenet administrator.
+
 
 ![](image3.png)
 
@@ -367,4 +364,4 @@ $docker-compose logs -f
 
 3. Navigate to the connector settings by the sidebar menu & define the local installation urls of your <b>Local API</b>, <b>Fiware Url</b> & <b>Data App</b> .
 
-![](image4.png)
+![](settings.jpg)
