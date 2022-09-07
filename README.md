@@ -120,16 +120,6 @@ This command downloads a test image and runs it in a container. When the contain
 
 To proceed with the installation of ONENET, the user must use the *docker* folder that contains all the necessary configuration.
 
-4b. Docker Settings
-
-The OneNet Data APP Docker image is available in a private docker registry (hosted by ENG). Please add the registry in your [docker settings](https://docs.docker.com/registry/insecure/).
-
-```
-{
-  "insecure-registries" : ["109.232.32.194:5000"]
-}
-```
-
 6. Next step is to deploy Onenet using Docker Compose. First step is to clone the <https://github.com/european-dynamics-rnd/OneNet>  repository, by typing:
 ```
 cd /opt/onenet-true-connector/
