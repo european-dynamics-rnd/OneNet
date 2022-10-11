@@ -179,5 +179,20 @@ services:
 #      - mongo-db:/data
       - ./data-consumer:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  sofia-frontend:
+    build:
+      context: onenet-ui
+      dockerfile: onenet-ui/Dockerfile
+      args:
+        CENTRAL_REGISTRY_URL: https://onenet-ngsi-ld.eurodyn.com/api
+    image: onenet-ui
+    container_name: onenet-ui
+    ports:
+      - "5000:80"
+    restart: unless-stopped
+    networks:
+      - default
+
 volumes:
   mongo-db: ~
