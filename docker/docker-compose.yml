@@ -183,26 +183,26 @@ services:
   onenet-ui:
     build:
       context: onenet-ui
-      dockerfile: onenet-ui/Dockerfile
+      dockerfile: Dockerfile
       args:
         CENTRAL_REGISTRY_URL: https://onenet-ngsi-ld.eurodyn.com/api
     image: onenet-ui
     container_name: onenet-ui
     ports:
-      - "5000:80"
+      - "30003:80"
     restart: unless-stopped
-    networks:
-      - default
+
   local_api:
     build:
-      context: local-api
+      context: onenet-local-api
       args:
         CENTRAL_REGISTRY: https://onenet-ngsi-ld.eurodyn.com/api
-      dockerfile: onenet-local-api/Dockerfile
+      dockerfile: Dockerfile
     image: local-api
     container_name: local-api
     ports:
       - "30001:30001"
     restart: unless-stopped
+
 volumes:
   mongo-db: ~
