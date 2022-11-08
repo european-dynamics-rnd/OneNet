@@ -225,7 +225,7 @@ services:
     image: docker.elastic.co/beats/filebeat:8.3.2
     entrypoint: "filebeat -e -strict.perms=false"
     environment:
-      - CONNECTOR_NAME=${CONNECTOR_NAME}
+      - CONNECTOR_NAME=connector_name
     volumes:
       - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - ./logs:/var/log
