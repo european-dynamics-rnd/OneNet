@@ -192,11 +192,20 @@ services:
       - "30003:80"
     restart: unless-stopped
 
+  dozzle:
+    image: amir20/dozzle
+    container_name: onenet-logs
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "15592:8080"
+
   local_api:
     build:
       context: onenet-local-api
       args:
-        CENTRAL_REGISTRY: https://onenet-ngsi-ld.eurodyn.com/api
+        CENTRAL_REGISTRY: http://onenet-ngsi-ld.eurodyn.com/api
       dockerfile: Dockerfile
     image: local-api
     container_name: local-api
