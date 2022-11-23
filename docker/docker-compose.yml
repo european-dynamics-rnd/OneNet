@@ -190,6 +190,8 @@ services:
     container_name: onenet-ui
     ports:
       - "30003:80"
+    volumes:
+      - ./logs/nginx:/var/log/nginx
     restart: unless-stopped
 
   dozzle:
@@ -212,6 +214,30 @@ services:
     ports:
       - "30001:30001"
     restart: unless-stopped
+
+## log collection
+  logstash:
+    container_name: logstash
+    image: docker.elastic.co/logstash/logstash:8.3.2
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/config/jvm.options:/usr/share/logstash/config/jvm.options
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    ports:
+      - "5044:5044"
+      - "5064:5064"
+    environment:
+      - LOG_LEVEL=info
+
+  filebeat:
+    container_name: filebeat
+    image: docker.elastic.co/beats/filebeat:8.3.2
+    entrypoint: "filebeat -e -strict.perms=false"
+    environment:
+      - CONNECTOR_NAME=connector_name
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs:/var/log
 
 volumes:
   mongo-db: ~
