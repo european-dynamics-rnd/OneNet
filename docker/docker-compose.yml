@@ -192,6 +192,16 @@ services:
       - "30003:80"
     restart: unless-stopped
 
+  onenet-ui-reverse-proxy:
+    image: nginx:1.21.4
+    container_name: onenet-ui-reverse-proxy
+    command: [nginx-debug, '-g', 'daemon off;']
+    restart: unless-stopped
+    volumes:
+      - ./nginx-conf/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "15591:80"
+
   dozzle:
     image: amir20/dozzle
     container_name: onenet-logs
