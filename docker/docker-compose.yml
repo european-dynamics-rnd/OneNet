@@ -215,7 +215,7 @@ services:
     build:
       context: onenet-local-api
       args:
-        CENTRAL_REGISTRY: http://onenet-ngsi-ld.eurodyn.com/api
+        CENTRAL_REGISTRY: https://onenet-ngsi-ld.eurodyn.com/api
       dockerfile: Dockerfile
     image: local-api
     container_name: local-api
