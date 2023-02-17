@@ -324,9 +324,11 @@ $docker-compose logs -f
 
 ### **Installation instructions**
 
-On every client computer that will run Onenet you must also install the Onenet Local Application by following the below steps:
+If you are using the local Ui  container on http://your_local_ip:30003 you can skip this step and use the containarized Onenet Local Application on http://your_local_ip:30001/api.
+If you are using the central Ui on https://onenet-ngsi-ld.eurodyn.com,  you must also install the Onenet Local Application
+on every client computer by following the below steps: 
 
-1. Login to the Ui Application From https://onenet-ngsi-ld.eurodyn.com or from the Ui container you just installed on https://your_local_ip:30003 using the username & password that you received from the onenet administrator.
+1. Login to the Ui Application using the username & password that you received from the onenet administrator.
 
 ![](image3.png)
 
@@ -344,7 +346,7 @@ On every client computer that will run Onenet you must also install the Onenet L
 
 ### **Local Applications subscription To the Central Registry**
 <br>
-2. Login to the Ui Central Registry From https://onenet-ngsi-ld.eurodyn.com using the username & password that you received from the onenet administrator.
+2. Login to the Ui Central Registry using the username & password that you received from the onenet administrator.
 
 
 ![](image3.png)
