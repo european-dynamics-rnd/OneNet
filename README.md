@@ -136,11 +136,11 @@ $docker-compose logs -f
 
 For this step you must open the Onenet User Interface. 
 The user interface is in a container that was installed on your premisses on the previous step.
-It can be accessed through the url http://the_ip_where_the_containers_are_installed:30003 
+It can be accessed through the url <code>http://the_ip_where_the_containers_are_installed:30003</code>
 
 ### ** Instructions**
 
-1. Login to the Ui Application using the username & password that you received from the onenet administrator.
+1. Login to the Ui Application using the <code>username</code> & <code>password</code> that you received from the onenet administrator.
 
 ![](image3.png)
 
