@@ -157,7 +157,7 @@ Data App Must Be Publicly Exposed In A Static Ip Via Https, before saved on the 
 This happens because Data App is Served As An Endpoint For Peer To Peer File Transfer between you and other Onenet users. 
 So the url must be the <code>https://your_static_url_that_points_to_dataapp_container</code>
 
-##### Ecc Url : <code>https://your_ip_where_the_containers_are:8889/data</code>
+##### Ecc Url
 The Ecc Url is also located on the <code>https://your_ip_where_the_containers_are:8889/data</code> but it cannot be used this way. 
 Ecc Url Must Be Publicly Exposed In A Static Ip Via Https, before saved on the connection settings. 
 This happens because Ecc Url is Served As An Endpoint For Peer To Peer File Transfer between you and other Onenet users. 
