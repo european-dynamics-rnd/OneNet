@@ -149,7 +149,7 @@ It can be accessed through the url <code>http://the_ip_where_the_containers_are_
 Those 4 onenet applications are running on the containers that you installed, so the urls must be configured accordingly as shown below 
 
 ##### Local Api Url 
-The url must be <code>http://your_ip_where_the_containers_are_installed:30001</code>
+The url must be <code>http://your_ip_where_the_containers_are_installed:30001/api</code>
 
 ##### Data App Url 
 The Data App is also located on the <code>http://your_ip_where_the_containers_are:8484</code> but it cannot be used this way. 
