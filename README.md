@@ -136,9 +136,7 @@ $docker-compose logs -f
 
 For this step you must open the Onenet User Interface. 
 The user interface is in a container that was installed on your premisses on the previous step.
-It can be accessed through the url <code>http://the_ip_where_the_containers_are_installed:30003</code>
-
-### ** Instructions**
+It can be accessed through the url <code>http://the_ip_where_the_containers_are_installed:30003</code>, so
 
 1. Login to the Ui Application using the <code>username</code> & <code>password</code> that you received from the onenet administrator.
 
@@ -148,4 +146,22 @@ It can be accessed through the url <code>http://the_ip_where_the_containers_are_
 
 ![](settings.jpg)
 
+Those 4 onenet applications are running on the containers that you installed, so the urls must be configured accordingly as shown below 
 
+###### Local Api Url 
+The url must be <code>http://your_ip_where_the_containers_are_installed:30001</code>
+
+###### Data App Url 
+The Data App is also located on the <code>http://your_ip_where_the_containers_are:8484</code> but it cannot be used this way. 
+Data App Must Be Publicly Exposed In A Static Ip Via Https, before saved on the connection settings. 
+This happens because Data App is Served As An Endpoint For Peer To Peer File Transfer between you and other Onenet users. 
+So the url must be the <code>https://your_static_url_that_points_to_dataapp_container</code>
+
+###### Ecc Url : <code>https://your_ip_where_the_containers_are:8889/data</code>
+The Ecc Url is also located on the <code>https://your_ip_where_the_containers_are:8889/data</code> but it cannot be used this way. 
+Ecc Url Must Be Publicly Exposed In A Static Ip Via Https, before saved on the connection settings. 
+This happens because Ecc Url is Served As An Endpoint For Peer To Peer File Transfer between you and other Onenet users. 
+So the url must be the <code>https://your_static_url_that_points_to_ecc_url_container</code>
+
+###### Broker Url 
+The url must be <code>http://your_ip_where_the_containers_are:1026</code>
