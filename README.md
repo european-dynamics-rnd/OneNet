@@ -144,7 +144,7 @@ It can be accessed through the url <code>http://the_ip_where_the_containers_are_
 
 2. Navigate to the connector settings by the sidebar menu & define the urls of your <code>Local Api Url</code>, <code>Data App Url</code>, <code>Ecc Url</code> & <code>Broker Url</code>  .
 
-![](settings.jpg)
+![](settings2.png)
 
 Those 4 onenet applications are running on the containers that you installed, so the urls must be configured accordingly as shown below 
 
