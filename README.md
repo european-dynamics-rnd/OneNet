@@ -144,7 +144,7 @@ It can be accessed through the url http://the_ip_where_the_containers_are_instal
 
 ![](image3.png)
 
-2. Navigate to the connector settings by the sidebar menu & define the urls of your <b>Local API</b>, <b>Fiware Url</b> & <b>Data App</b> .
+2. Navigate to the connector settings by the sidebar menu & define the urls of your <code>Local Api Url</code>, <code>Data App Url</code>, <code>Ecc Url</code> & <code>Broker Url</code>  .
 
 ![](settings.jpg)
 
