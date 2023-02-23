@@ -132,40 +132,20 @@ $docker-compose logs -f
 ```
 8. If no errors are seen, this means that ONENET FIWARE TRUE CONNECTOR was successfully deployed on your premisses.
 
-## **Onenet Local Application installation**
+## **Connection Settings Configuration through the User Interface**
 
-### **Installation instructions**
+For this step you must open the Onenet User Interface. 
+The user interface is in a container that was installed on your premisses on the previous step.
+It can be accessed through the url http://the_ip_where_the_containers_are_installed:30003 
 
-If you are using the local Ui  container on http://your_local_ip:30003 you can skip this step and use the containarized Onenet Local Application on http://your_local_ip:30001/api.
-If you are using the central Ui on https://onenet-ngsi-ld.eurodyn.com,  you must also install the Onenet Local Application
-on every client computer by following the below steps: 
+### ** Instructions**
 
 1. Login to the Ui Application using the username & password that you received from the onenet administrator.
 
 ![](image3.png)
 
-2. Download the Onenet Local Application installer from the "Useful documents" menu 
-
-![](usefuldocuments.jpg)
-
-3. Double click & run the Application
-
-![](onenetexe.jpg)
-
-3. After running the web browser should popup and show the page below indicating that the application is running.
-
-![](onenet2.jpg)
-
-### **Local Applications subscription To the Central Registry**
-<br>
-2. Login to the Ui Central Registry using the username & password that you received from the onenet administrator.
-
-
-![](image3.png)
-
-
-[^1]: <https://docs.docker.com/engine/install/centos/> 
-
-3. Navigate to the connector settings by the sidebar menu & define the local installation urls of your <b>Local API</b>, <b>Fiware Url</b> & <b>Data App</b> .
+2. Navigate to the connector settings by the sidebar menu & define the urls of your <b>Local API</b>, <b>Fiware Url</b> & <b>Data App</b> .
 
 ![](settings.jpg)
+
+
