@@ -118,19 +118,29 @@ This command downloads a test image and runs it in a container. When the contain
 
 ## **Onenet Containers Installation on Docker**
 
-To proceed with the installation of ONENET, the user must use the *docker* folder that contains all the necessary configuration.
+To proceed with the installation of ONENET, the user must use the *docker* folder of this repository that contains all the necessary configuration.
 
-6. Next step is to deploy Onenet using Docker Compose. First step is to clone the <https://github.com/european-dynamics-rnd/OneNet>  repository, by typing:
+1. The first step is to clone this repository <https://github.com/european-dynamics-rnd/OneNet> , by typing:
 ```
 cd /opt/onenet-true-connector/
 git clone https://github.com/european-dynamics-rnd/OneNet.git
 ```
-7. There is the docker-compose.yml file located under */opt/onenet/onenet-true-connector/docker that contains all the configuration of the onenet fiware true connector containers. You can start the containers us the below commands   
+
+2. There is the docker-compose.yml file located under /opt/onenet-true-connector/docker that contains all the configuration of the onenet fiware true connector containers. Go to that file by typing the command
+```
+cd /opt/onenet-true-connector/docker
+```
+
+3. At this step you must request from us a file with ".env" name and put it on the same folder /opt/onenet-true-connector/docker
+
+
+4. After puting the ".env" file in position you can start the containers with the below commands  
+
 ```
 $docker-compose up –d
 $docker-compose logs -f
 ```
-8. If no errors are seen, this means that ONENET FIWARE TRUE CONNECTOR was successfully deployed on your premisses.
+5. If no errors are seen, this means that ONENET FIWARE TRUE CONNECTOR was successfully deployed on your premisses.
 
 ## **Connection Settings Configuration through the User Interface**
 
