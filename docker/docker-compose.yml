@@ -158,16 +158,16 @@ services:
       - mongo-db
     #command: -dbhost mongo-db -logLevel DEBUG
     #command: -statCounters -dbhost mongo-db -logLevel DEBUG -forwarding
-    command: -dbhost 'mongo-db' -db orion -dbuser onenet -dbpwd true2022 -statCounters -logLevel DEBUG -forwarding
+    command: -dbhost 'mongo-db' -db ${MONGO_INITDB_DATABASE} -dbuser ${MONGO_INITDB_ROOT_USERNAME} -dbpwd ${MONGO_INITDB_ROOT_PASSWORD} -statCounters -logLevel DEBUG -forwarding
 
   mongo-db:
     image: mongo:3.6
     hostname: mongo-db
     container_name: db-mongo
     environment:
-       - MONGO_INITDB_DATABASE=orion
-       - MONGO_INITDB_ROOT_USERNAME=onenet
-       - MONGO_INITDB_ROOT_PASSWORD=true2022               
+       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}               
     ports:
       - "27017:27017" 
     networks:
