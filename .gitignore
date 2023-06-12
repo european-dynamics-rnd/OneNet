@@ -2,3 +2,4 @@
 docker/logs
 docker/data-consumer
 docker/logs/nginx
+docker/.env
