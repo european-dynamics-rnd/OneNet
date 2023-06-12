@@ -1,0 +1,18 @@
+{
+    "@context": [
+        "https://fiware.github.io/data-models/context.jsonld",
+        "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld"
+    ],
+    "endpoint": "{{endpoint}}",
+    "information": [
+        {
+            "entities": [
+                {
+                    "id": "{{entity-id}}",
+                    "type": "Building"
+                }
+            ]
+        }
+    ],
+    "type": "ContextSourceRegistration"
+}

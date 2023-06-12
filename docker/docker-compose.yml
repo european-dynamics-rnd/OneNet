@@ -1,150 +1,230 @@
 version: '2.2'
 services:
-  ecc-provider: 
-    image: rdlabengpa/ids_execution_core_container:v1.9.3
+  ecc-provider:
+    image: rdlabengpa/ids_execution_core_container:v1.11.0
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1024M
+    logging:
+      options:
+        max-size: "200M"
+    networks:
+      - provider
+      - consumer
+    container_name: ecc-provider
     ports:
-      - "${PROVIDER_PORT}:${INTERNAL_REST_PORT}"  #Port for exposing HTTP endpoints 
-      - 8889:8889  #Exposed port for receiving data from another connector (REST)
-      - 8086:8086  #Exposed port for receiving data from another connector (WS)
+      - "${PROVIDER_PORT}:${INTERNAL_REST_PORT}" #Port for exposing HTTP endpoints
+      - "8889:8889" #Exposed port for receiving data from another connector (REST)
+      - "8086:8086" #Exposed port for receiving data from another connector (WS)
     environment:
-       - "SPRING_PROFILES_ACTIVE=docker"  
-       - DATA_APP_ENDPOINT=${PROVIDER_DATA_APP_ENDPOINT}      #Data APP enpoint for consuming received data 
-       - MULTIPART_EDGE=${PROVIDER_MULTIPART_EDGE}                      #Data APP endpoint multipart/mixed content type
-       - MULTIPART_ECC=${MULTIPART_ECC} 
-       - REST_ENABLE_HTTPS=${REST_ENABLE_HTTPS}
-       - IDSCP2=${IDSCP2}
-       - WS_EDGE=${PROVIDER_WS_EDGE}
-       - WS_ECC=${WS_ECC}
-       - UC_DATAAPP_URI=${PROVIDER_UC_DATAAPP_URI}
-       - CLEARING_HOUSE=${CLEARING_HOUSE}
-       - PUBLIC_PORT=${PROVIDER_PORT}
-       - BROKER_URL=${BROKER_URL}
-       - DISABLE_SSL_VALIDATION=${DISABLE_SSL_VALIDATION}
-       - CACHE_TOKEN=${CACHE_TOKEN}
-       - FETCH_TOKEN_ON_STARTUP=${FETCH_TOKEN_ON_STARTUP}
-       - SERVER_SSL_ENABLED=${SERVER_SSL_ENABLED}
-       - KEYSTORE_NAME=${KEYSTORE_NAME}
-       - KEY_PASSWORD=${KEY_PASSWORD}
-       - KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
-       - ALIAS=${ALIAS}
-       - DAPS_KEYSTORE_NAME=${DAPS_KEYSTORE_NAME}
-       - DAPS_KEYSTORE_PASSWORD=${DAPS_KEYSTORE_PASSWORD}
-       - DAPS_KEYSTORE_ALIAS=${DAPS_KEYSTORE_ALIAS}
-       - TRUSTORE_NAME=${TRUSTORE_NAME}
-       - TRUSTORE_PASSWORD=${TRUSTORE_PASSWORD}
-       - TZ=Europe/Rome                
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - DATA_APP_ENDPOINT=${PROVIDER_DATA_APP_ENDPOINT} #Data APP enpoint for consuming received data
+      - MULTIPART_EDGE=${PROVIDER_MULTIPART_EDGE} #Data APP endpoint multipart/mixed content type
+      - MULTIPART_ECC=${MULTIPART_ECC}
+      - REST_ENABLE_HTTPS=${REST_ENABLE_HTTPS}
+      - IDSCP2=${IDSCP2}
+      - WS_EDGE=${PROVIDER_WS_EDGE}
+      - WS_ECC=${WS_ECC}
+      - UC_DATAAPP_URI=http://uc-dataapp-provider:8080/platoontec/PlatoonDataUsage/1.0/
+      - CLEARING_HOUSE=${CLEARING_HOUSE}
+      - PUBLIC_PORT=${PROVIDER_PORT}
+      - BROKER_URL=${BROKER_URL}
+      - DISABLE_SSL_VALIDATION=${DISABLE_SSL_VALIDATION}
+      - CACHE_TOKEN=${CACHE_TOKEN}
+      - FETCH_TOKEN_ON_STARTUP=${FETCH_TOKEN_ON_STARTUP}
+      - SERVER_SSL_ENABLED=${SERVER_SSL_ENABLED}
+      - KEYSTORE_NAME=${KEYSTORE_NAME}
+      - KEY_PASSWORD=${KEY_PASSWORD}
+      - KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
+      - ALIAS=${ALIAS}
+      - DAPS_KEYSTORE_NAME=${PROVIDER_DAPS_KEYSTORE_NAME}
+      - DAPS_KEYSTORE_PASSWORD=${PROVIDER_DAPS_KEYSTORE_PASSWORD}
+      - DAPS_KEYSTORE_ALIAS=${PROVIDER_DAPS_KEYSTORE_ALIAS}
+      - TRUSTORE_NAME=${TRUSTORE_NAME}
+      - TRUSTORE_PASSWORD=${TRUSTORE_PASSWORD}
+      - TZ=Europe/Rome
+      - IS_ENABLED_DAPS_INTERACTION=${IS_ENABLED_DAPS_INTERACTION}
+      - IS_ENABLED_CLEARINGHOUSE=${IS_ENABLED_CLEARINGHOUSE}
+      - IS_ENABLED_USAGE_CONTROL=${IS_ENABLED_USAGE_CONTROL}
     volumes:
       - ./ecc_resources_provider:/config
       - ./ecc_cert:/cert
-    extra_hosts:
-      - "ecc-consumer:172.17.0.1"
-
-  uc-dataapp-provider:
-    image: rdlabengpa/ids_uc_data_app:v0.0.6
-    environment:
-      - TZ=Europe/Rome 
-    ports:
-      - "9552:9555"
-      - "8043:43"
-    volumes:
-      - ./policies:/policies
-      - ./uc-dataapp_resources:/config
-
-  be-dataapp-provider:
-    # image: rdlabengpa/ids_fiware_data_app:v0.0.2
-    image: ferbosco/onenet-connector-fiware-data-app:0.1
-    environment:
-       - "SPRING_PROFILES_ACTIVE=docker"  
-       - DATA_APP_MULTIPART=${PROVIDER_MULTIPART_EDGE}
-       - SERVER_SSL_ENABLED=${SERVER_SSL_ENABLED}
-       - KEYSTORE_NAME=${KEYSTORE_NAME}
-       - KEY_PASSWORD=${KEY_PASSWORD}
-       - KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
-       - ALIAS=${ALIAS}
-       - TZ=Europe/Rome 
-       - ECC_HOSTNAME=ecc-provider
-       - IP_PROVIDER_CONTEXT_BROKER=${LOCAL_IP_PROVIDER_CONTEXT_BROKER}
-       - ECC_PORT=8889
-    ports:
-      - "8083:8083"
-      - "9000:9000"
-    volumes:
-      - ./be-dataapp_resources:/config
-      - ./be-dataapp_data_receiver:/data
-      - ./ecc_cert:/cert
-
-  ecc-consumer: 
-    image: rdlabengpa/ids_execution_core_container:v1.9.3
-    ports:
-      - "${CONSUMER_PORT}:${INTERNAL_REST_PORT}"  #Port for exposing HTTP endpoints 
-      - 8890:8889  #Exposed port for receiving data from another connector (REST)
-      - 8087:8086  #Exposed port for receiving data from another connector (WS)
-    environment:
-       - "SPRING_PROFILES_ACTIVE=docker"  
-       - DATA_APP_ENDPOINT=${CONSUMER_DATA_APP_ENDPOINT}    #Data APP enpoint for consuming received data 
-       - MULTIPART_EDGE=${CONSUMER_MULTIPART_EDGE}          #Data APP endpoint multipart/mixed content type
-       - MULTIPART_ECC=${MULTIPART_ECC}
-       - REST_ENABLE_HTTPS=${REST_ENABLE_HTTPS}
-       - IDSCP2=${IDSCP2}
-       - WS_EDGE=${CONSUMER_WS_EDGE}
-       - WS_ECC=${WS_ECC}
-       - CLEARING_HOUSE=${CLEARING_HOUSE}
-       - UC_DATAAPP_URI=${CONSUMER_UC_DATAAPP_URI}
-       - PUBLIC_PORT=${CONSUMER_PORT}
-       - BROKER_URL=${BROKER_URL}
-       - DISABLE_SSL_VALIDATION=${DISABLE_SSL_VALIDATION}
-       - CACHE_TOKEN=${CACHE_TOKEN}
-       - FETCH_TOKEN_ON_STARTUP=${FETCH_TOKEN_ON_STARTUP}
-       - SERVER_SSL_ENABLED=${SERVER_SSL_ENABLED}
-       - KEYSTORE_NAME=${KEYSTORE_NAME}
-       - KEY_PASSWORD=${KEY_PASSWORD}
-       - KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
-       - ALIAS=${ALIAS}
-       - DAPS_KEYSTORE_NAME=${DAPS_KEYSTORE_NAME}
-       - DAPS_KEYSTORE_PASSWORD=${DAPS_KEYSTORE_PASSWORD}
-       - DAPS_KEYSTORE_ALIAS=${DAPS_KEYSTORE_ALIAS}
-       - TRUSTORE_NAME=${TRUSTORE_NAME}
-       - TRUSTORE_PASSWORD=${TRUSTORE_PASSWORD}
-       - TZ=Europe/Rome                
-    volumes:
-      - ./ecc_resources_consumer:/config
-      - ./ecc_cert:/cert
+      - ecc_provider_log:/var/log/ecc
+      - ecc_provider_sd:/sd
     extra_hosts:
       - "ecc-provider:172.17.0.1"
 
-  uc-dataapp-consumer:
-    image: rdlabengpa/ids_uc_data_app:v0.0.6
+  uc-dataapp-provider:
+    image: rdlabengpa/ids_uc_data_app_platoon:v1.5
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+    logging:
+      options:
+        max-size: "100M"
+    networks:
+      - provider
+    container_name: uc-dataapp-provider
     environment:
-      - TZ=Europe/Rome  
-    ports:
-      - "9553:9555"
-      - "8044:43"
+      - TZ=Europe/Rome
+    expose:
+      - "8080"
     volumes:
-      - ./policies:/policies
-      - ./uc-dataapp_resources:/config
+      - ./uc-dataapp_resources_provider:/etc
+      - uc_provider_data:/data
+
+  be-dataapp-provider:
+    image: plinardi/onenet-connector-fiware-data-app:0.2.0
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+    logging:
+      options:
+        max-size: "100M"
+    networks:
+      - provider
+    container_name: be-dataapp-provider
+    ports:
+      - "8083:8083"
+      - "9000:9000"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - DATA_APP_MULTIPART=${PROVIDER_MULTIPART_EDGE}
+      - SERVER_SSL_ENABLED=${SERVER_SSL_ENABLED}
+      - KEYSTORE_NAME=${KEYSTORE_NAME}
+      - KEY_PASSWORD=${KEY_PASSWORD}
+      - KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
+      - ALIAS=${ALIAS}
+      - ECC_HOSTNAME=ecc-provider
+      - ECC_PORT=8887
+      - TZ=Europe/Rome
+      - ISSUER_CONNECTOR_URI=${PROVIDER_ISSUER_CONNECTOR_URI}
+      - EXTRACT_PAYLOAD_FROM_RESPONSE=${EXTRACT_PAYLOAD_FROM_RESPONSE}
+      - IP_PROVIDER_CONTEXT_BROKER=${LOCAL_IP_PROVIDER_CONTEXT_BROKER}
+    volumes:
+      - ./be-dataapp_resources:/config
+      - ./ecc_cert:/cert
+      - ./be-dataapp_resources/data:/data
+
+  ecc-consumer:
+    image: rdlabengpa/ids_execution_core_container:v1.11.0
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1024M
+    logging:
+      options:
+        max-size: "200M"
+    networks:
+      - consumer
+      - provider
+    container_name: ecc-consumer
+    ports:
+      - "${CONSUMER_PORT}:${INTERNAL_REST_PORT}" #Port for exposing HTTP endpoints
+      - "8890:8889" #Exposed port for receiving data from another connector (REST)
+      - "8087:8086" #Exposed port for receiving data from another connector (WS)
+      - "8887:8887"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - DATA_APP_ENDPOINT=${CONSUMER_DATA_APP_ENDPOINT} #Data APP enpoint for consuming received data
+      - MULTIPART_EDGE=${CONSUMER_MULTIPART_EDGE} #Data APP endpoint multipart/mixed content type
+      - MULTIPART_ECC=${MULTIPART_ECC}
+      - REST_ENABLE_HTTPS=${REST_ENABLE_HTTPS}
+      - IDSCP2=${IDSCP2}
+      - WS_EDGE=${CONSUMER_WS_EDGE}
+      - WS_ECC=${WS_ECC}
+      - CLEARING_HOUSE=${CLEARING_HOUSE}
+      - UC_DATAAPP_URI=http://uc-dataapp-consumer:8080/platoontec/PlatoonDataUsage/1.0/
+      - PUBLIC_PORT=${CONSUMER_PORT}
+      - BROKER_URL=${BROKER_URL}
+      - DISABLE_SSL_VALIDATION=${DISABLE_SSL_VALIDATION}
+      - CACHE_TOKEN=${CACHE_TOKEN}
+      - FETCH_TOKEN_ON_STARTUP=${FETCH_TOKEN_ON_STARTUP}
+      - SERVER_SSL_ENABLED=${SERVER_SSL_ENABLED}
+      - KEYSTORE_NAME=${KEYSTORE_NAME}
+      - KEY_PASSWORD=${KEY_PASSWORD}
+      - KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
+      - ALIAS=${ALIAS}
+      - DAPS_KEYSTORE_NAME=${CONSUMER_DAPS_KEYSTORE_NAME}
+      - DAPS_KEYSTORE_PASSWORD=${CONSUMER_DAPS_KEYSTORE_PASSWORD}
+      - DAPS_KEYSTORE_ALIAS=${CONSUMER_DAPS_KEYSTORE_ALIAS}
+      - TRUSTORE_NAME=${TRUSTORE_NAME}
+      - TRUSTORE_PASSWORD=${TRUSTORE_PASSWORD}
+      - TZ=Europe/Rome
+      - IS_ENABLED_DAPS_INTERACTION=${IS_ENABLED_DAPS_INTERACTION}
+      - IS_ENABLED_CLEARINGHOUSE=${IS_ENABLED_CLEARINGHOUSE}
+      - IS_ENABLED_USAGE_CONTROL=${IS_ENABLED_USAGE_CONTROL}
+    volumes:
+      - ./ecc_resources_consumer:/config
+      - ./ecc_cert:/cert
+      - ecc_consumer_log:/var/log/ecc
+      - ecc_consumer_sd:/sd
+    extra_hosts:
+      - "ecc-consumer:172.17.0.1"
+
+  uc-dataapp-consumer:
+    image: rdlabengpa/ids_uc_data_app_platoon:v1.5
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+    logging:
+      options:
+        max-size: "100M"
+    networks:
+      - consumer
+    container_name: uc-dataapp-consumer
+    environment:
+      - TZ=Europe/Rome
+    expose:
+      - "8080"
+    volumes:
+      - ./uc-dataapp_resources_consumer:/etc
+      - uc_consumer_data:/data
 
   be-dataapp-consumer:
-    # image: rdlabengpa/ids_fiware_data_app:v0.0.2
-    image: ferbosco/onenet-connector-fiware-data-app:0.1
-    environment:
-       - "SPRING_PROFILES_ACTIVE=docker"  
-       - DATA_APP_MULTIPART=${CONSUMER_MULTIPART_EDGE}
-       - SERVER_SSL_ENABLED=${SERVER_SSL_ENABLED}
-       - KEYSTORE_NAME=${KEYSTORE_NAME}
-       - KEY_PASSWORD=${KEY_PASSWORD}
-       - KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
-       - ALIAS=${ALIAS}
-       - TZ=Europe/Rome     
-       - ECC_HOSTNAME=ecc-consumer
-       - IP_PROVIDER_CONTEXT_BROKER=${LOCAL_IP_PROVIDER_CONTEXT_BROKER}       
-       - ECC_PORT=8887
+    image: plinardi/onenet-connector-fiware-data-app:0.2.0
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+    logging:
+      options:
+        max-size: "100M"
+    networks:
+      - consumer
+    container_name: be-dataapp-consumer
     ports:
       - "8084:8083"
       - "9001:9000"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - DATA_APP_MULTIPART=${CONSUMER_MULTIPART_EDGE}
+      - SERVER_SSL_ENABLED=${SERVER_SSL_ENABLED}
+      - KEYSTORE_NAME=${KEYSTORE_NAME}
+      - KEY_PASSWORD=${KEY_PASSWORD}
+      - KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
+      - ALIAS=${ALIAS}
+      - ECC_HOSTNAME=ecc-consumer
+      - EXTRACT_PAYLOAD_FROM_RESPONSE=${EXTRACT_PAYLOAD_FROM_RESPONSE}
+      - ECC_PORT=8887
+      - TZ=Europe/Rome
+      - ISSUER_CONNECTOR_URI=${CONSUMER_ISSUER_CONNECTOR_URI}
+      - IP_PROVIDER_CONTEXT_BROKER=${LOCAL_IP_PROVIDER_CONTEXT_BROKER}
     volumes:
       - ./be-dataapp_resources:/config
-      - ./be-dataapp_data_sender:/data
       - ./ecc_cert:/cert
+      - ./be-dataapp_resources/data:/data
+
   orion:
     image: fiware/orion-ld:0.7.0
     hostname: orion
@@ -165,18 +245,18 @@ services:
     hostname: mongo-db
     container_name: db-mongo
     environment:
-       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
-       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}               
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     ports:
-      - "27017:27017" 
+      - "27017:27017"
     networks:
       - default
     command: --auth --nojournal
-#    volumes:
-#      - mongo-db:/data
+    #    volumes:
+    #      - mongo-db:/data
     volumes:
-#      - mongo-db:/data
+      #      - mongo-db:/data
       - ./data-consumer:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
@@ -197,7 +277,7 @@ services:
   onenet-ui-reverse-proxy:
     image: nginx:1.21.4
     container_name: onenet-ui-reverse-proxy
-    command: [nginx-debug, '-g', 'daemon off;']
+    command: [ nginx-debug, '-g', 'daemon off;' ]
     restart: unless-stopped
     volumes:
       - ./nginx-conf/nginx.conf:/etc/nginx/nginx.conf
@@ -225,7 +305,7 @@ services:
       - "30001:30001"
     restart: unless-stopped
 
-## log collection
+  ## log collection
   logstash:
     container_name: logstash
     image: docker.elastic.co/logstash/logstash:8.3.2
@@ -249,5 +329,17 @@ services:
       - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - ./logs:/var/log
 
+networks:
+  consumer: {}
+  provider: {}
+
 volumes:
   mongo-db: ~
+  ecc_provider_log: {}
+  ecc_provider_sd: {}
+  uc_provider_data: {}
+  be_dataapp_data_provider: {}
+  ecc_consumer_log: {}
+  ecc_consumer_sd: {}
+  uc_consumer_data: {}
+  be_dataapp_data_consumer: {}

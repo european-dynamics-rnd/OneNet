@@ -1,2 +1,4 @@
 .idea
 docker/logs
+docker/data-consumer
+docker/logs/nginx

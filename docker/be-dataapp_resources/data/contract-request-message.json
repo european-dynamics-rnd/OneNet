@@ -1,0 +1,23 @@
+{
+    "multipart": "{{multipart_type}}",
+    "Forward-To": "{{Forward-To}}",
+    "messageType": "ContractRequestMessage",
+    "requestedElement": "{{contract_artifact}}",
+    "payload": {
+        "@context": {
+            "ids": "https://w3id.org/idsa/core/",
+            "idsc": "https://w3id.org/idsa/code/"
+        },
+        "@type": "ids:ContractRequest",
+        "@id": "{{contract_id}}",
+        "ids:permission": [],
+        "ids:provider": {
+            "@id": "{{contract_provider}}"
+        },
+        "ids:obligation": [],
+        "ids:prohibition": [],
+        "ids:consumer": {
+            "@id": "http://w3id.org/engrd/connector/consumer"
+        }
+    }
+}
