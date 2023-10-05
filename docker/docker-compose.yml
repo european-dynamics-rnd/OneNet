@@ -108,9 +108,9 @@ services:
       - EXTRACT_PAYLOAD_FROM_RESPONSE=${EXTRACT_PAYLOAD_FROM_RESPONSE}
       - IP_PROVIDER_CONTEXT_BROKER=${LOCAL_IP_PROVIDER_CONTEXT_BROKER}
     volumes:
-      - ./be-dataapp_resources:/config
+      - ./be-dataapp_resources_provider:/config
       - ./ecc_cert:/cert
-      - ./be-dataapp_resources/data:/data
+      - ./be-dataapp_resources_provider/data:/data
 
   ecc-consumer:
     image: rdlabengpa/ids_execution_core_container:v1.11.0
@@ -204,8 +204,8 @@ services:
       - consumer
     container_name: be-dataapp-consumer
     ports:
-      - "8084:8083"
-      - "9001:9000"
+      - "8084:8084"
+      - "9001:9001"
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
       - DATA_APP_MULTIPART=${CONSUMER_MULTIPART_EDGE}
@@ -221,9 +221,9 @@ services:
       - ISSUER_CONNECTOR_URI=${CONSUMER_ISSUER_CONNECTOR_URI}
       - IP_PROVIDER_CONTEXT_BROKER=${LOCAL_IP_PROVIDER_CONTEXT_BROKER}
     volumes:
-      - ./be-dataapp_resources:/config
+      - ./be-dataapp_resources_consumer:/config
       - ./ecc_cert:/cert
-      - ./be-dataapp_resources/data:/data
+      - ./be-dataapp_resources_consumer/data:/data
 
   orion:
     image: fiware/orion-ld:0.7.0
@@ -303,9 +303,15 @@ services:
     container_name: local-api
     ports:
       - "30001:30001"
+    networks:
+      - provider
+      - consumer
+    volumes:
+      - ./ecc_cert/execution_core_container.cer:/cert/execution_core_container.cer
+      - ./local-api/data/scripts/cert.sh:/cert/cert.sh
     restart: unless-stopped
-
-  ## log collection
+    command: bash -c " ./cert/cert.sh && ./entrypoint.sh"
+    ## log collection
   logstash:
     container_name: logstash
     image: docker.elastic.co/logstash/logstash:8.3.2
