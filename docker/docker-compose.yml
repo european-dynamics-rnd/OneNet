@@ -1,4 +1,4 @@
-version: '2.2'
+version: '2.3'
 services:
   ecc-provider:
     image: rdlabengpa/ids_execution_core_container:v1.11.0
@@ -78,7 +78,7 @@ services:
       - uc_provider_data:/data
 
   be-dataapp-provider:
-    image: plinardi/onenet-connector-fiware-data-app:0.2.0
+    image: plinardi/onenet-connector-fiware-data-app:0.2.1
     deploy:
       resources:
         limits:
@@ -106,7 +106,13 @@ services:
       - TZ=Europe/Rome
       - ISSUER_CONNECTOR_URI=${PROVIDER_ISSUER_CONNECTOR_URI}
       - EXTRACT_PAYLOAD_FROM_RESPONSE=${EXTRACT_PAYLOAD_FROM_RESPONSE}
-      - IP_PROVIDER_CONTEXT_BROKER=${LOCAL_IP_PROVIDER_CONTEXT_BROKER}
+      - CONTEXT_BROKER_PROTOCOL=${CONTEXT_BROKER_PROTOCOL}
+      - CONTEXT_BROKER_IP=${CONTEXT_BROKER_IP}
+      - CONTEXT_BROKER_PORT=${CONTEXT_BROKER_PORT}
+      - CONTEXT_BROKER_PROVIDER_PATH=${CONTEXT_BROKER_PROVIDER_PATH}
+      - CONTEXT_BROKER_REGISTRATION_PATH=${CONTEXT_BROKER_REGISTRATION_PATH}
+      - MONGO_HOST_IP=${MONGO_HOST_IP}
+      - MONGO_HOST_PORT=${MONGO_HOST_PORT}
     volumes:
       - ./be-dataapp_resources_provider:/config
       - ./ecc_cert:/cert
@@ -191,7 +197,7 @@ services:
       - uc_consumer_data:/data
 
   be-dataapp-consumer:
-    image: plinardi/onenet-connector-fiware-data-app:0.2.0
+    image: plinardi/onenet-connector-fiware-data-app:0.2.1
     deploy:
       resources:
         limits:
@@ -219,7 +225,13 @@ services:
       - ECC_PORT=8887
       - TZ=Europe/Rome
       - ISSUER_CONNECTOR_URI=${CONSUMER_ISSUER_CONNECTOR_URI}
-      - IP_PROVIDER_CONTEXT_BROKER=${LOCAL_IP_PROVIDER_CONTEXT_BROKER}
+      - CONTEXT_BROKER_PROTOCOL=${CONTEXT_BROKER_PROTOCOL}
+      - CONTEXT_BROKER_IP=${CONTEXT_BROKER_IP}
+      - CONTEXT_BROKER_PORT=${CONTEXT_BROKER_PORT}
+      - CONTEXT_BROKER_PROVIDER_PATH=${CONTEXT_BROKER_PROVIDER_PATH}
+      - CONTEXT_BROKER_REGISTRATION_PATH=${CONTEXT_BROKER_REGISTRATION_PATH}
+      - MONGO_HOST_IP=${MONGO_HOST_IP}
+      - MONGO_HOST_PORT=${MONGO_HOST_PORT}
     volumes:
       - ./be-dataapp_resources_consumer:/config
       - ./ecc_cert:/cert
