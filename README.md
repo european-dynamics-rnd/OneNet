@@ -176,3 +176,43 @@ So the url must be the <code>https://your_static_url_that_points_to_ecc_url_cont
 
 ##### Broker Url 
 The url must be <code>http://your_ip_where_the_containers_are:1026</code>
+
+#### Optional Nginx configuration
+Optionally you can use nginx as web server.
+
+The folder _docker/nginx-connector-config/_ contains a [_docker-compose.yml_](docker/nginx-connector-config/docker-compose.yml) file and an example of nginx configuration ([_nginx.conf_](docker/nginx-connector-config/nginx.conf)).
+
+The [_docker-compose.yml_](docker/nginx-connector-config/docker-compose.yml) defines the nginx service to start (from the official image), the exposed ports and the volumes to mount.
+
+```
+version: "3"
+services:
+  nginx:
+   image : nginx:latest
+   ports :
+       - "8080:8080"
+       - "80:80"
+       - "443:443"
+   volumes:
+       - ./ssl:/etc/nginx/ssl
+       - ./nginx.conf:/etc/nginx/conf.d/default.conf
+``` 
+
+The [(_nginx.conf_)](docker/nginx-connector-config/nginx.conf) contains header management, SSL configuration and location directives necessary for the correct functioning of the connector.
+
+In particular, for each service to be exposed, a location type directive must be defined with the following configurations (please replace the _**path**_ and _**uri**_ placeholders with your own values):
+```
+  location /<path> {
+    proxy_pass <uri>;
+    proxy_redirect off;
+    proxy_set_header    Upgrade     $http_upgrade;
+    proxy_set_header    Connection  "upgrade";
+    proxy_set_header Host $host:$server_port;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Ssl on;
+    proxy_set_header  X-Forwarded-Proto  https;
+    rewrite ^/<path>/(.*)$ /$1 break;
+  }
+``` 
+
+For further information, refer to the [Official Nginx Guide](https://nginx.org/en/docs/).
