@@ -1,0 +1,67 @@
+{
+    "@context": {
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "ids": "https://w3id.org/idsa/core/",
+        "idsc": "https://w3id.org/idsa/code/"
+    },
+    "@type": "ids:ContractAgreement",
+    "@id": "https://w3id.org/idsa/autogen/contractAgreement/b748af25-051b-43d4-9bc5-432ad7201549",
+    "ids:provider": {
+        "@id": "http://w3id.org/engrd/connector"
+    },
+    "ids:permission": [{
+            "@type": "ids:Permission",
+            "@id": "https://w3id.org/idsa/autogen/permission/54b738f1-50e4-42e2-868b-823f193d4c19",
+            "ids:target": {
+                "@id": "http://w3id.org/engrd/connector/artifact/1"
+            },
+            "ids:description": [],
+            "ids:title": [],
+            "ids:constraint": [{
+                    "@type": "ids:Constraint",
+                    "@id": "https://w3id.org/idsa/autogen/constraint/99defc43-0cc7-4097-87a5-88ea06b83b88",
+                    "ids:leftOperand": {
+                        "@id": "https://w3id.org/idsa/code/POLICY_EVALUATION_TIME"
+                    },
+                    "ids:rightOperand": {
+                        "@value": "2021-04-01T00:00:00Z",
+                        "@type": "xsd:datetimeStamp"
+                    },
+                    "ids:pipEndpoint": {
+                        "@id": "https//pip.com/policy_evaluation_time"
+                    },
+                    "ids:operator": {
+                        "@id": "https://w3id.org/idsa/code/EQUALS"
+                    }
+                }
+            ],
+            "ids:assigner": [{
+                    "@id": "https://assigner.com"
+                }
+            ],
+            "ids:action": [{
+                    "@id": "https://w3id.org/idsa/code/USE"
+                }
+            ],
+            "ids:assignee": [{
+                    "@id": "https://assignee.com"
+                }
+            ],
+            "ids:postDuty": [],
+            "ids:preDuty": []
+        }
+    ],
+    "ids:prohibition": [],
+    "ids:obligation": [],
+    "ids:contractStart": {
+        "@value": "2021-10-27T17:25:06.862+02:00",
+        "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+    },
+    "ids:contractEnd": {
+        "@value": "2021-12-27T17:25:06.862+02:00",
+        "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+    },
+    "ids:consumer": {
+        "@id": "http://w3id.org/engrd/connector/recipient"
+    }
+}
