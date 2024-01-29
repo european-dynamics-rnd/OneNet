@@ -322,7 +322,7 @@ services:
       - ./ecc_cert/execution_core_container.cer:/cert/execution_core_container.cer
       - ./local-api/data/scripts/cert.sh:/cert/cert.sh
     restart: unless-stopped
-    command: bash -c " ./cert/cert.sh && ./entrypoint.sh"
+    command: bash -c "chmod u+x ./cert/cert.sh && ./cert/cert.sh && ./entrypoint.sh"
     ## log collection
   logstash:
     container_name: logstash
