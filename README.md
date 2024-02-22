@@ -134,8 +134,11 @@ cd /opt/onenet-true-connector/docker
 3. :warning: At this step you must request from us a file with ".env" name and put it on the same folder /opt/onenet-true-connector/docker.
 Email us on the helias.karagozidis@eurodyn.com to get the ".env" file.
 
+4. :information_source: Replace the following environment variables values with "your_ip_where_the_containers_will_be_installed":
+   - MONGO_HOST_IP
+   - CONTEXT_BROKER_IP
 
-4. After puting the ".env" file in position you can start the containers with the below commands  
+5. After puting the ".env" file in position you can start the containers with the below commands  
 
 ```
 $docker-compose up –d
