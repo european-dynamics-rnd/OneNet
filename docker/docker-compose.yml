@@ -83,7 +83,7 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 512M
+          memory: 1024M
     logging:
       options:
         max-size: "100M"
@@ -202,7 +202,7 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 512M
+          memory: 1024M
     logging:
       options:
         max-size: "100M"
